@@ -1,0 +1,30 @@
+#!/usr/bin/env ruby
+
+TARGET_FOLDER = "./test-site"
+
+def analyze_folder; end
+
+def prepare_folder
+  puts "Preparing folder #{TARGET_FOLDER} for upload..."
+  zip_path = "/tmp/site_upload.zip"
+  system("zip -r #{zip_path} #{TARGET_FOLDER}")
+
+  puts "Folder prepared and zipped at #{zip_path}."
+
+  zip_path
+end
+
+def upload_folder; end
+def cleanup
+  puts "Cleaning up temporary files..."
+  system("rm -f /tmp/site_upload.zip")
+  puts "Cleanup complete."
+end
+def render_response; end
+
+analyze_folder()
+archive = prepare_folder()
+url = upload_folder(archive, "baked-goods")
+cleanup()
+render_response(url)
+
