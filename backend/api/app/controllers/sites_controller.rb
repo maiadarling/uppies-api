@@ -1,0 +1,53 @@
+require 'spicy-proton'
+require 'zip'
+
+class SitesController < ApplicationController
+  def create
+    name = validate_or_generate_name(params[:name])
+    base64_data = params[:data]
+
+    site_folder = Rails.root.join('storage', 'sites', name)
+    FileUtils.mkdir_p(site_folder)
+
+    temp_zip_path = decode_file(base64_data)
+    unzip_archive(temp_zip_path, site_folder)
+    File.delete(temp_zip_path)
+
+    site = Site.new
+    site.name = name
+    site.storage_path = site_folder.to_s
+    site.save!
+
+    render json: {
+      data: {
+        name: site.name,
+        url: site.url,
+        status: site.status
+      }
+    }
+  end
+
+private
+
+  def validate_or_generate_name(proposed_name)
+    Spicy::Proton.pair
+  end
+
+  def decode_file(base64_data)
+    zip_data = Base64.decode64(base64_data)
+    temp_zip_path = Rails.root.join('tmp', "temp_#{Time.now.to_i}.zip")
+    File.open(temp_zip_path, 'wb') do |f|
+      f.write(zip_data)
+    end
+    temp_zip_path
+  end
+
+  def unzip_archive(zip_path, extract_to)
+    Zip::File.open(zip_path) do |zip_file|
+      zip_file.each do |entry|
+        entry_path = File.join(extract_to, entry.name)
+        entry.extract(entry_path)
+      end
+    end
+  end
+end

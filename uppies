@@ -1,4 +1,8 @@
 #!/usr/bin/env ruby
+require 'base64'
+require 'json'
+require 'net/http'
+require 'uri'
 
 TARGET_FOLDER = "./test-site"
 
@@ -14,7 +18,21 @@ def prepare_folder
   zip_path
 end
 
-def upload_folder; end
+def upload_folder(archive_path, site_name = nil)
+  params = {
+    data: Base64.encode64(File.read(archive_path))
+  }
+  url = "http://localhost:3000/sites"
+
+  # Post it
+  response = Net::HTTP.post_form(URI(url), params)
+  puts "Upload response: #{response.body}"
+
+  json = JSON.parse(response.body)
+
+  return json
+end
+
 def cleanup
   puts "Cleaning up temporary files..."
   system("rm -f /tmp/site_upload.zip")
@@ -24,7 +42,9 @@ def render_response; end
 
 analyze_folder()
 archive = prepare_folder()
-url = upload_folder(archive, "baked-goods")
+response = upload_folder(archive)
+puts "Uploaded site URL: #{response['url']}"
+puts response.inspect
 cleanup()
-render_response(url)
+render_response()
 
