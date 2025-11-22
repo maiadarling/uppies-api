@@ -1,5 +1,4 @@
 require 'spicy-proton'
-require 'zip'
 
 class SitesController < ApplicationController
   def create
@@ -45,11 +44,6 @@ private
   end
 
   def unzip_archive(zip_path, extract_to)
-    Zip::File.open(zip_path) do |zip_file|
-      zip_file.each do |entry|
-        entry_path = File.join(extract_to, entry.name)
-        entry.extract(entry_path)
-      end
-    end
+    system("unzip", zip_path.to_s, "-d", extract_to.to_s)
   end
 end
