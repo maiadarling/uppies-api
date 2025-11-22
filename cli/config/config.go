@@ -1,4 +1,4 @@
-package commands
+package config
 
 import (
 	"encoding/json"
@@ -6,23 +6,33 @@ import (
 	"path/filepath"
 )
 
-type Config struct {
+const (
+	ConfigDir  = ".uppies"
+	ConfigFile = "config"
+)
+
+type configData struct {
 	Token string `json:"token"`
 }
 
-var GlobalConfig Config
+var Token string
 
-func LoadConfig() {
+func getConfigPath() string {
 	home, err := os.UserHomeDir()
 	if err != nil {
 		panic(err)
 	}
-	configDir := filepath.Join(home, ".uppies")
-	configPath := filepath.Join(configDir, "config")
+	return filepath.Join(home, ConfigDir, ConfigFile)
+}
 
+func LoadConfig() {
+	configPath := getConfigPath()
+	configDir := filepath.Dir(configPath)
+
+	var data configData
 	if _, err := os.Stat(configPath); os.IsNotExist(err) {
 		// Create default config
-		GlobalConfig = Config{
+		data = configData{
 			Token: "",
 		}
 		// Ensure directory exists
@@ -33,7 +43,7 @@ func LoadConfig() {
 			panic(err)
 		}
 		defer file.Close()
-		json.NewEncoder(file).Encode(GlobalConfig)
+		json.NewEncoder(file).Encode(data)
 	} else {
 		// Read from file
 		file, err := os.Open(configPath)
@@ -41,6 +51,7 @@ func LoadConfig() {
 			panic(err)
 		}
 		defer file.Close()
-		json.NewDecoder(file).Decode(&GlobalConfig)
+		json.NewDecoder(file).Decode(&data)
 	}
+	Token = data.Token
 }

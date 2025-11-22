@@ -5,6 +5,7 @@ import (
 
 	"github.com/spf13/cobra"
 	"uppies/cli/commands"
+	"uppies/cli/config"
 )
 
 func main() {
@@ -13,8 +14,9 @@ func main() {
 		Short: "Uppies CLI tool",
 	}
 
-	commands.LoadConfig()
+	config.LoadConfig()
 
+	rootCmd.AddCommand(commands.LoginCommand())
 	rootCmd.AddCommand(commands.PlzCommand())
 
 	if err := rootCmd.Execute(); err != nil {

@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 
 	"github.com/spf13/cobra"
+	"uppies/cli/config"
 )
 
 func resolvePath(path string) (string, error) {
@@ -24,11 +25,11 @@ func plzRun(cmd *cobra.Command, args []string) {
 
 	// Complex logic here: analyze folder, archive, upload, call APIs, verify state, report back
 	fmt.Printf("Starting plz process for folder: %s\n", absFolder)
-	fmt.Printf("Using config: token=%s\n", GlobalConfig.Token)
+	fmt.Printf("Using config: token=%s\n", config.Token)
 }
 
 func requireLogin(cmd *cobra.Command, args []string) {
-	if GlobalConfig.Token == "" {
+	if config.Token == "" {
 		fmt.Println("You must be logged in to use this command. Run 'uppies login' to authenticate.")
 		os.Exit(1)
 	}
