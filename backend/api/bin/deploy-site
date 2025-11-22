@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
 # Usage:
-#   ./up.sh /path/to/site-dir subdomain
+#   ./deploy-site.sh /path/to/site-dir subdomain
 #
 # Example:
-#   ./up.sh ./dist jeans
+#   ./deploy-site.sh ./dist jeans
 
 set -e
 
@@ -27,9 +27,9 @@ ROUTER_NAME="${SUBDOMAIN}"
 CONTAINER_NAME="${SUBDOMAIN}-site"
 
 # Kill existing container if exists
-docker rm -f "$CONTAINER_NAME" 2>/dev/null || true
+sudo docker rm -f "$CONTAINER_NAME" 2>/dev/null || true
 
-docker run -d \
+CONTAINER_ID=$(sudo docker run -d \
   --name "$CONTAINER_NAME" \
   --network uppies_net \
   -v "$(realpath "$SITE_DIR")":/usr/share/caddy:ro \
@@ -37,15 +37,9 @@ docker run -d \
   -l "traefik.http.routers.${ROUTER_NAME}.rule=Host(\"${HOSTNAME}\")" \
   -l "traefik.http.routers.${ROUTER_NAME}.entrypoints=websecure" \
   -l "traefik.http.routers.${ROUTER_NAME}.tls.certresolver=myresolver" \
-  caddy:alpine
+  caddy:alpine)
 
-echo ""
-echo "--------------------------------------------"
-echo " Launched Uppies site"
-echo "  Name:       $CONTAINER_NAME"
-echo "  Hostname:   $HOSTNAME"
-echo "  Directory:  $SITE_DIR"
-echo ""
-echo " Visit:"
-echo "  https://${HOSTNAME}"
-echo "--------------------------------------------"
+jq -n \
+  --arg id "$CONTAINER_ID" \
+  --arg name "$CONTAINER_NAME" \
+ '{id: $id, name: $name}'

@@ -18,6 +18,8 @@ class SitesController < ApplicationController
     site.storage_path = site_folder.to_s
     site.save!
 
+    DeploySiteJob.perform_later(site_id: site.id)
+
     render json: {
       data: {
         name: site.name,
