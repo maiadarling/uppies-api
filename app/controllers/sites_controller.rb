@@ -1,6 +1,20 @@
 require 'spicy-proton'
 
 class SitesController < ApplicationController
+  def index
+    @sites = Site.all
+    render json: {
+      data: @sites.map { |site|
+        {
+          id: site.id,
+          name: site.name,
+          url: site.url,
+          status: site.status
+        }
+      }
+    }
+  end
+
   def show
     site = Site.find_by(name: params[:name])
     if site.nil?
