@@ -7,7 +7,9 @@ class DeploySiteJob < ApplicationJob
     site.deploying!
 
     # Execute Rails.root/bin/deploy-site with FULL_PATH and NAME as args
-    output = `#{Rails.root}/bin/deploy-site #{site.storage_path} #{site.name}`
+    command = "#{Rails.root}/bin/deploy-site #{site.storage_path} #{site.name}"
+    puts "Running command: #{command}"
+    output = `#{command}`
 
     puts "Output from deploy-site script: #{output}"
 

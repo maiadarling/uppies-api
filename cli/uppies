@@ -22,7 +22,7 @@ def upload_folder(archive_path, site_name = nil)
   params = {
     data: Base64.encode64(File.read(archive_path))
   }
-  url = "http://localhost:3000/sites"
+  url = "http://i.uppies.dev:3000/sites"
 
   # Post it
   response = Net::HTTP.post_form(URI(url), params)
