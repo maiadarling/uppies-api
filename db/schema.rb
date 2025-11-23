@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_23_031257) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_23_041123) do
   create_table "domain_names", force: :cascade do |t|
     t.integer "site_id", null: false
     t.string "name", null: false
@@ -20,16 +20,26 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_23_031257) do
     t.index ["site_id"], name: "index_domain_names_on_site_id"
   end
 
+  create_table "releases", force: :cascade do |t|
+    t.integer "site_id", null: false
+    t.integer "deployed_by_id", null: false
+    t.string "container_id"
+    t.string "storage_path", null: false
+    t.integer "status", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["deployed_by_id"], name: "index_releases_on_deployed_by_id"
+    t.index ["site_id"], name: "index_releases_on_site_id"
+  end
+
   create_table "sites", force: :cascade do |t|
     t.string "name", null: false
-    t.string "storage_path", null: false
     t.integer "status", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "owner_type", null: false
     t.integer "owner_id", null: false
     t.integer "creator_id", null: false
-    t.string "container_id"
     t.index ["creator_id"], name: "index_sites_on_creator_id"
     t.index ["name"], name: "index_sites_on_name", unique: true
     t.index ["owner_type", "owner_id"], name: "index_sites_on_owner"
@@ -45,5 +55,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_23_031257) do
   end
 
   add_foreign_key "domain_names", "sites"
+  add_foreign_key "releases", "sites"
+  add_foreign_key "releases", "users", column: "deployed_by_id"
   add_foreign_key "sites", "users", column: "creator_id"
 end

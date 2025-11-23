@@ -54,6 +54,10 @@ class ContainerOrchestrator
     container&.delete(v: include_volumes, force: force)
   end
 
+  def purge_container(container_id)
+    remove_container(container_id, include_volumes: true, force: true)
+  end
+
 private
 
   def matches_labels?(info, labels)

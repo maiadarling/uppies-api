@@ -2,16 +2,14 @@
 #
 # Table name: sites
 #
-#  id           :integer          not null, primary key
-#  name         :string           not null
-#  owner_type   :string           not null
-#  status       :integer          default("created"), not null
-#  storage_path :string           not null
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#  container_id :string
-#  creator_id   :integer          not null
-#  owner_id     :integer          not null
+#  id         :integer          not null, primary key
+#  name       :string           not null
+#  owner_type :string           not null
+#  status     :integer          default("created"), not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  creator_id :integer          not null
+#  owner_id   :integer          not null
 #
 # Indexes
 #
@@ -30,6 +28,7 @@ class Site < ApplicationRecord
   belongs_to :creator, class_name: "User"
 
   has_many :domain_names, dependent: :destroy
+  has_many :releases, dependent: :destroy
 
   def uppies_domain
     "#{name}.uppies.dev"

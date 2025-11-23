@@ -5,8 +5,8 @@ class ApplicationController < ActionController::API
 protected
 
   def current_user
-    return nil unless session[:user_id]
-    @current_user ||= User.find_by(id: session[:user_id])
+    return nil unless current_user_api_key.present?
+    @current_user ||= User.find_by(token: current_user_api_key)
   end
 
   def logged_in?
@@ -22,7 +22,7 @@ protected
   end
 
   def current_user_api_key
-    request.headers["X-Uppies-Key"]
+    request.headers["HTTP_X_UPPIES_KEY"] || request.headers["X-UPPIES-KEY"]
   end
 
   def success!(message = nil, data: nil, template: nil, status: :ok)
