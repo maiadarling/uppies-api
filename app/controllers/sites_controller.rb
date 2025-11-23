@@ -1,5 +1,3 @@
-require "spicy-proton"
-
 class SitesController < ApplicationController
   def index
     @sites = Site.all
@@ -32,7 +30,7 @@ class SitesController < ApplicationController
   end
 
   def create
-    name = validate_or_generate_name(params[:name])
+    name = SiteService.validate_or_generate_name(params[:name])
     base64_data = params[:data]
 
     site_folder = Rails.root.join("storage", "sites", name)
@@ -61,10 +59,6 @@ class SitesController < ApplicationController
   end
 
 private
-
-  def validate_or_generate_name(proposed_name)
-    Spicy::Proton.pair
-  end
 
   def decode_file(base64_data)
     zip_data = Base64.decode64(base64_data)
