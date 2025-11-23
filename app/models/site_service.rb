@@ -53,7 +53,16 @@ module SiteService
   end
 
   def self.restart_site(site:)
-    stop_site(site: site)
+    raise ArgumentError, "Invalid site. Must be a Site or Integer" unless site.is_a?(Site) || site.is_a?(Integer)
+    site = site.is_a?(Site) ? site : Site.find(site)
+
+    old_container_id = site.container_id
+
+    if old_container_id.present?
+      stop_site(site: site)
+      orchestrator.remove_container(old_container_id)
+    end
+
     start_site(site: site)
   end
 
