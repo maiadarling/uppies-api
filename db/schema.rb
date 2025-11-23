@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_22_075737) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_22_080522) do
   create_table "sites", force: :cascade do |t|
     t.string "name", null: false
     t.string "storage_path", null: false
@@ -20,6 +20,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_22_075737) do
     t.string "owner_type", null: false
     t.integer "owner_id", null: false
     t.integer "creator_id", null: false
+    t.string "container_id"
     t.index ["creator_id"], name: "index_sites_on_creator_id"
     t.index ["name"], name: "index_sites_on_name", unique: true
     t.index ["owner_type", "owner_id"], name: "index_sites_on_owner"

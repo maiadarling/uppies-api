@@ -100,6 +100,13 @@ GEM
     erubi (1.13.1)
     et-orbi (1.4.0)
       tzinfo
+    factory_bot (6.5.6)
+      activesupport (>= 6.1.0)
+    factory_bot_rails (6.5.1)
+      factory_bot (~> 6.5)
+      railties (>= 6.1.0)
+    faker (3.5.2)
+      i18n (>= 1.8.11, < 2)
     fugit (1.12.1)
       et-orbi (~> 1.4)
       raabro (~> 1.4)
@@ -139,6 +146,9 @@ GEM
     marcel (1.1.0)
     mini_mime (1.1.5)
     minitest (5.26.2)
+    minitest-stub-const (0.6)
+    mocha (2.8.2)
+      ruby2_keywords (>= 0.0.5)
     msgpack (1.8.0)
     net-imap (0.5.12)
       date
@@ -261,8 +271,11 @@ GEM
       rubocop-performance (>= 1.24)
       rubocop-rails (>= 2.30)
     ruby-progressbar (1.13.0)
+    ruby2_keywords (0.0.5)
     rubyzip (3.2.2)
     securerandom (0.4.1)
+    shoulda-matchers (5.3.0)
+      activesupport (>= 5.2.0)
     solid_cache (1.0.10)
       activejob (>= 7.2)
       activerecord (>= 7.2)
@@ -327,11 +340,17 @@ DEPENDENCIES
   bootsnap
   brakeman
   debug
+  factory_bot_rails
+  faker
   kamal
+  minitest
+  minitest-stub-const
+  mocha
   puma (>= 5.0)
   rails (~> 8.0.4)
   rubocop-rails-omakase
   rubyzip
+  shoulda-matchers (~> 5.0)
   solid_cache
   solid_queue
   spicy-proton

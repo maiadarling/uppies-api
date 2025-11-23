@@ -9,6 +9,7 @@
 #  storage_path :string           not null
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  container_id :string
 #  creator_id   :integer          not null
 #  owner_id     :integer          not null
 #
