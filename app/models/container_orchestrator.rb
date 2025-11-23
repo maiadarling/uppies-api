@@ -41,7 +41,17 @@ class ContainerOrchestrator
 
   def stop_container(container_id)
     container = Docker::Container.get(container_id)
-    container.stop
+    container&.stop
+  end
+
+  def restart_container(container_id)
+    container = Docker::Container.get(container_id)
+    container&.restart
+  end
+
+  def remove_container(container_id, include_volumes: false, force: false)
+    container = Docker::Container.get(container_id)
+    container&.delete(v: include_volumes, force: force)
   end
 
 private

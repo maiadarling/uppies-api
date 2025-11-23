@@ -29,7 +29,13 @@ class Site < ApplicationRecord
   belongs_to :owner, polymorphic: true
   belongs_to :creator, class_name: "User"
 
+  has_many :domain_names, dependent: :destroy
+
+  def uppies_domain
+    "#{name}.uppies.dev"
+  end
+
   def url
-    "https://#{name}.uppies.dev"
+    "https://#{uppies_domain}"
   end
 end

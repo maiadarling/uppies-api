@@ -10,7 +10,7 @@ class DeploySiteJob < ApplicationJob
     site = site.is_a?(Site) ? site : Site.find(site)
 
     site.update!(status: :deploying)
-    SiteService.launch_site(site: site)
+    SiteService.start_site(site: site)
     site.update!(status: :live)
 
   rescue => e

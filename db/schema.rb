@@ -10,7 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_22_080522) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_23_031257) do
+  create_table "domain_names", force: :cascade do |t|
+    t.integer "site_id", null: false
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_domain_names_on_name", unique: true
+    t.index ["site_id"], name: "index_domain_names_on_site_id"
+  end
+
   create_table "sites", force: :cascade do |t|
     t.string "name", null: false
     t.string "storage_path", null: false
@@ -35,5 +44,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_22_080522) do
     t.index ["token"], name: "index_users_on_token", unique: true
   end
 
+  add_foreign_key "domain_names", "sites"
   add_foreign_key "sites", "users", column: "creator_id"
 end

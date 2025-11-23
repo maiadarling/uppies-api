@@ -5,7 +5,7 @@ module SiteService
     Spicy::Proton.pair
   end
 
-  def self.launch_site(site:)
+  def self.start_site(site:)
     raise ArgumentError, "Invalid site. Must be a Site or Integer" unless site.is_a?(Site) || site.is_a?(Integer)
     site = site.is_a?(Site) ? site : Site.find(site)
 
@@ -24,7 +24,7 @@ module SiteService
         "uppies.owner.id" => site.owner_id.to_s,
         "uppies.owner.type" => site.owner_type,
         "traefik.enable" => "true",
-        "traefik.http.routers.#{site.name}.rule" => "Host(`#{site.name}.uppies.dev`)",
+        "traefik.http.routers.#{site.name}.rule" => build_host_rules(site),
         "traefik.http.routers.#{site.name}.entrypoints" => "websecure",
         "traefik.http.routers.#{site.name}.tls.certresolver" => "myresolver"
       }
@@ -52,7 +52,21 @@ module SiteService
     end
   end
 
+  def self.restart_site(site:)
+    stop_site(site: site)
+    start_site(site: site)
+  end
+
+
 private
+
+  def self.build_host_rules(site)
+    rules = ["Host(`#{site.uppies_domain}`)"]
+    site.domain_names.each do |domain|
+      rules << "Host(`#{domain.name}`)"
+    end
+    rules.join(" || ")
+  end
 
   def self.orchestrator
     @orchestrator ||= ContainerOrchestrator.new
