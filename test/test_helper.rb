@@ -12,22 +12,22 @@ ENV["RAILS_ENV"] ||= "test"
 # end
 
 require_relative "../config/environment"
-require 'minitest/autorun'
+require "minitest/autorun"
 require "rails/test_help"
-require 'factory_bot_rails'
+require "factory_bot_rails"
 
 class ActiveSupport::TestCase
   include FactoryBot::Syntax::Methods
 
   # Run tests in parallel with specified workers
-  #parallelize(workers: :number_of_processors)
+  # parallelize(workers: :number_of_processors)
 
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all
 
   # Add more helper methods to be used by all tests here...
   def fixture_file_path(file)
-    File.join(Rails.root, 'test', 'fixtures', 'files', file)
+    File.join(Rails.root, "test", "fixtures", "files", file)
   end
 
   class << self
@@ -46,7 +46,7 @@ class ActiveSupport::TestCase
     include ActiveSupport::Testing::FileFixtures
 
     def fixture_file_path(file)
-      File.join(Rails.root, 'test', 'fixtures', 'files', file)
+      File.join(Rails.root, "test", "fixtures", "files", file)
     end
 
     def upload_file!(file, content_type)
@@ -54,4 +54,3 @@ class ActiveSupport::TestCase
     end
   end
 end
-

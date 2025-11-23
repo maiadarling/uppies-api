@@ -18,11 +18,11 @@ protected
 
     user = User.find_by(token: current_user_api_key)
 
-    return error!("Access Denied", status: :unauthorized) if user.nil?
+    error!("Access Denied", status: :unauthorized) if user.nil?
   end
 
   def current_user_api_key
-    request.headers['X-Uppies-Key']
+    request.headers["X-Uppies-Key"]
   end
 
   def success!(message = nil, data: nil, template: nil, status: :ok)

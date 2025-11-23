@@ -13,7 +13,7 @@
 #  index_users_on_email_address  (email_address) UNIQUE
 #  index_users_on_token          (token) UNIQUE
 #
-require 'faker'
+require "faker"
 
 FactoryBot.define do
   factory :user do

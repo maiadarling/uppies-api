@@ -15,13 +15,13 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
     end
 
     it "denies access with invalid token" do
-      get sites_path, headers: { 'X-Uppies-Key' => 'invalid' }
+      get sites_path, headers: { "X-Uppies-Key" => "invalid" }
       assert_response :unauthorized
       assert_equal "Access Denied", JSON.parse(response.body)["error"]
     end
 
     it "authenticates with valid token" do
-      get sites_path, headers: { 'X-Uppies-Key' => @user.token }
+      get sites_path, headers: { "X-Uppies-Key" => @user.token }
       assert_response :success
     end
   end

@@ -1,4 +1,4 @@
-require 'spicy-proton'
+require "spicy-proton"
 
 class SitesController < ApplicationController
   def index
@@ -35,7 +35,7 @@ class SitesController < ApplicationController
     name = validate_or_generate_name(params[:name])
     base64_data = params[:data]
 
-    site_folder = Rails.root.join('storage', 'sites', name)
+    site_folder = Rails.root.join("storage", "sites", name)
     FileUtils.mkdir_p(site_folder)
 
     temp_zip_path = decode_file(base64_data)
@@ -68,8 +68,8 @@ private
 
   def decode_file(base64_data)
     zip_data = Base64.decode64(base64_data)
-    temp_zip_path = Rails.root.join('tmp', "temp_#{Time.now.to_i}.zip")
-    File.open(temp_zip_path, 'wb') do |f|
+    temp_zip_path = Rails.root.join("tmp", "temp_#{Time.now.to_i}.zip")
+    File.open(temp_zip_path, "wb") do |f|
       f.write(zip_data)
     end
     temp_zip_path

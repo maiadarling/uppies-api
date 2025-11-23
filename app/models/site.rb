@@ -27,7 +27,7 @@ class Site < ApplicationRecord
   enum :status, created: 0, deploying: 1, live: 2, error: -1
 
   belongs_to :owner, polymorphic: true
-  belongs_to :creator, class_name: 'User'
+  belongs_to :creator, class_name: "User"
 
   def url
     "https://#{name}.uppies.dev"

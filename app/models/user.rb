@@ -13,7 +13,7 @@
 #  index_users_on_email_address  (email_address) UNIQUE
 #  index_users_on_token          (token) UNIQUE
 #
-require 'securerandom'
+require "securerandom"
 
 class User < ApplicationRecord
   before_create :generate_token
