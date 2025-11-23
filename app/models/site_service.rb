@@ -57,13 +57,12 @@ module SiteService
     site = site.is_a?(Site) ? site : Site.find(site)
 
     old_container_id = site.container_id
+    new_container_id = start_site(site: site)
 
     if old_container_id.present?
       stop_site(site: site)
       orchestrator.remove_container(old_container_id)
     end
-
-    start_site(site: site)
   end
 
 
