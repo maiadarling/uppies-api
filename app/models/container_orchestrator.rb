@@ -1,7 +1,7 @@
 require "docker"
 
 class ContainerOrchestrator
-  def initialize(sock_path: "~/.docker/run/docker.sock")
+  def initialize(sock_path: Orchestrator::SOCK_PATH)
     @sock_path = File.expand_path(sock_path)
     Docker.url = "unix://#{@sock_path}"
   end
