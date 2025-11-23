@@ -64,29 +64,20 @@ module SiteService
   def self.stop_site(site:)
     site = resolve_object(Site, site)
 
-    if site.container_id.present?
-      orchestrator.stop_container(site.container_id)
-    else
-      containers = orchestrator.containers.select do |c|
-        c.labels["uppies.site.id"] == site.id.to_s
-      end
+    # Get all releases that have a container_id
+    releases_with_containers = site.releases.where.not(container_id: nil)
 
-      containers.each do |container|
-        orchestrator.stop_container(container.id)
-      end
+    releases_with_containers.each do |release|
+      orchestrator.stop_container(release.container_id)
+      release.update!(status: :stopped, container_id: nil)
     end
   end
 
   def self.restart_site(site:, release: nil)
     site = resolve_object(Site, site)
 
-    old_container_id = site.container_id
+    stop_site(site:)
     new_container_id = start_site(site:, release:)
-
-    if old_container_id.present?
-      stop_site(site:)
-      orchestrator.remove_container(old_container_id)
-    end
   end
 
 #private

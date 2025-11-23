@@ -22,7 +22,7 @@
 #  site_id         (site_id => sites.id)
 #
 class Release < ApplicationRecord
-  enum :status, created: 0, deploying: 1, live: 2, error: -1
+  enum :status, created: 0, deploying: 1, live: 2, stopped: 3, error: -1
 
   belongs_to :site
   belongs_to :deployed_by, class_name: "User"
