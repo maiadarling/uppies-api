@@ -1,16 +1,8 @@
 class SitesController < ApplicationController
   def index
-    @sites = Site.all
-    render json: {
-      data: @sites.map { |site|
-        {
-          id: site.id,
-          name: site.name,
-          url: site.url,
-          status: site.status
-        }
-      }
-    }
+    @sites = current_user.sites.order(created_at: :desc)
+
+    return success!(data: @sites)
   end
 
   def show
