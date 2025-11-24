@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   get "sites/:name" => "sites#show"
-  resources :sites, only: [ :create, :index ]
+  resources :sites, only: [ :create, :index ] do
+    resources :releases, only: [ :create, :index ]
+  end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

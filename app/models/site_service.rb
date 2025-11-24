@@ -61,26 +61,31 @@ module SiteService
     return container.id
   end
 
-  def self.stop_site(site:)
+  def self.stop_site(site:, delete: false)
     site = resolve_object(Site, site)
 
     # Get all releases that have a container_id
     releases_with_containers = site.releases.where.not(container_id: nil)
 
     releases_with_containers.each do |release|
-      orchestrator.stop_container(release.container_id)
+      if delete
+        orchestrator.purge_container(release.container_id)
+      else
+        orchestrator.stop_container(release.container_id)
+      end
+
       release.update!(status: :stopped, container_id: nil)
     end
   end
 
-  def self.restart_site(site:, release: nil)
+  def self.restart_site(site:, release: nil, delete: false)
     site = resolve_object(Site, site)
 
-    stop_site(site:)
+    stop_site(site:, delete:)
     new_container_id = start_site(site:, release:)
   end
 
-#private
+private
 
   def self.build_host_rules(site)
     rules = ["Host(`#{site.uppies_domain}`)"]
